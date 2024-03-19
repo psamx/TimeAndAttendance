@@ -24,5 +24,5 @@ flutter pub get
 ##  Run Application
 
 ```
-flutter app
+flutter run
 ```

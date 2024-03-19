@@ -4,6 +4,7 @@ import 'package:timeandattendanceapp/login_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:timeandattendanceapp/config.dart';
 import 'package:http/http.dart' as http;
+import 'googleMaps.dart';
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({super.key});
@@ -171,6 +172,26 @@ class _InformationScreenState extends State<InformationScreen> {
                 ],
               ),
             ),
+            Container(
+              margin: const EdgeInsets.only(top: 20.0,bottom: 20.0),
+              child: ElevatedButton(
+              onPressed: () {
+                // Handle button press
+                //Navigate to googlemaps.dart
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GoogleMaps())
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20), // Adjust the button's padding
+                textStyle: const TextStyle(fontSize: 20),
+                 // Adjust the button's text size
+              ),
+                child: Text('Google Maps'),
+            )
+            ),
+            
             ElevatedButton(
               onPressed: () {
                 // Handle button press

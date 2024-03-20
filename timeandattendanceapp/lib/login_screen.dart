@@ -16,11 +16,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _entityController = TextEditingController();
   final AppConfig _appConfig = AppConfig();
   //if data exists in local storage, fill the text fields with the data
-  
+  var _isObscure;
   final storage = const FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
+    _isObscure = true;
     checkSession();
   } 
 
@@ -131,8 +132,18 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 20.0),
             TextField(
               controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: _isObscure,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                suffixIcon: IconButton(
+                  icon: _isObscure? const Icon(Icons.visibility_off):  const Icon(Icons.visibility),
+                  onPressed: () {
+                    setState(() {
+                      _isObscure = !_isObscure;
+                    });
+                  },
+                )
+                ),
             ),
             const SizedBox(height: 20.0),
             TextField(

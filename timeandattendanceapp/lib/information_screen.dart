@@ -300,7 +300,7 @@ class _InformationScreenState extends State<InformationScreen> {
               ),
             ),
             //If longitude and latitude fields are null add a drop down field with values from storage key locations and an extra value that will navigate to a new screen
-            status == 'In' && longitude == null && latitude == null ? _buildLocationDropdown() : Container(),
+            status != 'In' && longitude == null && latitude == null ? _buildLocationDropdown() : Container(),
             //_buildLocationDropdown(),
             ElevatedButton(
               onPressed: () {

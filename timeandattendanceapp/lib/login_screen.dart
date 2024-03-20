@@ -13,7 +13,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _entityController = TextEditingController();
+  String? _selectedEntity; // Variable to hold the selected entity
+  final List<String> _entities = ['Windsor Brokers']; // Example entities
+
   final AppConfig _appConfig = AppConfig();
   //if data exists in local storage, fill the text fields with the data
   
@@ -28,13 +30,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final String username = _usernameController.text;
     final String password = _passwordController.text;
-    final String entity = _entityController.text;
+    final String? entity = _selectedEntity; // Use the selected entity
 
-    //store data in local storage
-    await storage.write(key: 'username', value: username);
-    await storage.write(key: 'password', value: password);
-    await storage.write(key: 'entity', value: entity);
-
+    if (entity == null) {
+    // Handle the case where the entity is not selected
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Please select an entity.'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
     // Create a JSON object with the user input
     final Map<String, dynamic> data = {
       'username': username,
@@ -135,9 +142,20 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: const InputDecoration(labelText: 'Password'),
             ),
             const SizedBox(height: 20.0),
-            TextField(
-              controller: _entityController,
+            DropdownButtonFormField<String>(
+              value: _selectedEntity,
               decoration: const InputDecoration(labelText: 'Entity'),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedEntity = newValue;
+                });
+              },
+              items: _entities.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
@@ -150,25 +168,35 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
   
-  Future<void> checkSession() async{
-    String? username;
-    String? password;
-    String? entity;
+  Future<void> checkSession() async {
+    // No need to declare these variables at the beginning
+    // String? username;
+    // String? password;
+    // String? entity;
+
     bool usernameExists = await storage.containsKey(key: 'username');
     bool passwordExists = await storage.containsKey(key: 'password');
-    bool entityExists = await storage.containsKey(key: 'entity');
-    if (usernameExists){
-      username = storage.read(key: 'username') as String;
-      _usernameController.text = username;
-    } 
-    if (passwordExists){
-      password = storage.read(key: 'password') as String;
-      _passwordController.text = password;
+
+    if (usernameExists) {
+      String? username = await storage.read(key: 'username');
+      if (username != null) { // Always check for null when dealing with async operations
+        _usernameController.text = username;
+      }
     }
-    if (entityExists){
-      entity = storage.read(key: 'entity') as String;
-      _entityController.text = entity;
+    if (passwordExists) {
+      String? password = await storage.read(key: 'password');
+      if (password != null) {
+        _passwordController.text = password;
+      }
     }
+    String? entity = await storage.read(key: 'entity');
+    if (entity != null && _entities.contains(entity)) { // Ensure the read entity is in your list
+    setState(() {
+      _selectedEntity = entity;
+    });
+  }
+    
     setState(() {});
   }
+
 }

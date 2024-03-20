@@ -6,7 +6,7 @@ class AppConfig {
   AppConfig._internal();
 
   // Add your configuration variables here
-  String apiUrl = 'http://localhost:8787/';
+    String apiUrl = 'https://worker-yellow-flower-d1d3.psamxg1968.workers.dev/';
   bool isDebugEnabled = true; // Example configuration variable
 
   // Example method to toggle debug mode

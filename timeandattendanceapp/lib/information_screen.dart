@@ -171,6 +171,7 @@ class _InformationScreenState extends State<InformationScreen> {
                 ],
               ),
             ),
+            
             ElevatedButton(
               onPressed: () {
                 // Handle button press

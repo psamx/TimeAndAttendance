@@ -14,7 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _selectedEntity; // Variable to hold the selected entity
-  final List<String> _entities = ['Windsor Brokers']; // Example entities
+  final List<String> _entities = ['Abacus','Grant Thornton','Hyperion Systems Engineering','Green Dot', 'PwC','Windsor Brokers']; // Example entities
 
   final AppConfig _appConfig = AppConfig();
   //if data exists in local storage, fill the text fields with the data

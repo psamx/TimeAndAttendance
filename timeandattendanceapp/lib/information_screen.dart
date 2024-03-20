@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:timeandattendanceapp/login_screen.dart';
+import 'package:TimeAndAttendance/login_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:timeandattendanceapp/config.dart';
-import 'package:timeandattendanceapp/location_model.dart';
+import 'package:TimeAndAttendance/config.dart';
+import 'package:TimeAndAttendance/location_model.dart';
 import 'package:http/http.dart' as http;
 import 'googleMaps.dart';
 

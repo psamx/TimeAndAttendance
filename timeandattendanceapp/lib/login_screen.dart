@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:timeandattendanceapp/information_screen.dart';
+import 'package:TimeAndAttendance/information_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:timeandattendanceapp/config.dart';
+import 'package:TimeAndAttendance/config.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

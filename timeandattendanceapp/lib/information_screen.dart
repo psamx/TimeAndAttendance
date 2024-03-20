@@ -170,7 +170,7 @@ class _InformationScreenState extends State<InformationScreen> {
       'SessionId': sessionId,
       'EmployeeCode': employeeCode,
       'DateTime': DateTime.now().toIso8601String(),
-      'AttendanceStatus': 'In',//SnewStatus,
+      'AttendanceStatus': newStatus,
       "Latitude": selectedLocation?.latitude??latitude,
       "Longitude": selectedLocation?.longitude??longitude,
       };
@@ -350,13 +350,10 @@ class _InformationScreenState extends State<InformationScreen> {
       // Check if the special option was selected
       if (value!.name == 'Add New Location') {
         // Navigate to the new screen
-        /*
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => NewLocationScreen()), // Assuming you have a NewLocationScreen
+          MaterialPageRoute(builder: (context) => const GoogleMaps()), // Assuming you have a NewLocationScreen
         );
-        */
-        _showResponsePopup("New Location", "Add new location");
       } else {
         setState(() {
           selectedLocation = value;

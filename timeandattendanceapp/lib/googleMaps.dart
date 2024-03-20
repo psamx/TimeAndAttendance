@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:timeandattendanceapp/information_screen.dart';
+import 'package:timeandattendanceapp/location_model.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() => runApp(const GoogleMaps());
 
@@ -13,6 +17,7 @@ class GoogleMaps extends StatefulWidget {
 
 
 class _GoogleMapsState extends State<GoogleMaps> {
+  final storage = const FlutterSecureStorage();
   late GoogleMapController mapController;
   LatLng? _currentPosition;
   LatLng? _positionNew;
@@ -21,11 +26,19 @@ class _GoogleMapsState extends State<GoogleMaps> {
   final List<Marker> markers = [];
   final textController = TextEditingController();
   bool _validate = false; 
-
+  List<Location> locations = [];
+  
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
-    getLocation() async {
+  
+  @override
+  void initState() {
+    getLocation();
+    loadLocations();
+  }
+
+  Future<void> getLocation() async {
       print(_isLoading);
       LocationPermission permission;
       permission = await Geolocator.requestPermission();
@@ -44,13 +57,70 @@ class _GoogleMapsState extends State<GoogleMaps> {
         _isLoading = false;
       });
       print(_isLoading);
-    }
-  
-  @override
-  void initState() {
-    getLocation();
   }
-  
+
+  Future<void> loadLocations() async {
+    final String? locationsJson = await storage.read(key: 'locations');
+    if (locationsJson != null) {
+      final Map<String, dynamic> locationsMap = jsonDecode(locationsJson);
+      setState(() {
+        locations = locationsMap.entries
+            .map((entry) {
+              final name = entry.key;
+              final locationData = entry.value as Map<String, dynamic>;
+              final longitude = locationData['longitude'] as double;
+              final latitude = locationData['latitude'] as double;
+              return Location(name: name, longitude: longitude, latitude: latitude);
+            })
+            .toList();
+      });
+    }
+    else{
+      locations.add(Location(name: 'WORK', longitude: 33.0480134, latitude: 34.6987503));
+    }
+  }
+
+  Future<void> saveLocations(List<Location> locations) async {
+    final Map<String, Map<String, dynamic>> serializedLocations = {};
+    locations.forEach((location) {
+              serializedLocations[location.name] = {
+                'longitude': location.longitude,
+                'latitude': location.latitude,
+              };
+            });
+    await storage.write(key: 'locations', value: jsonEncode(serializedLocations));
+  }
+
+  //Create a function to add a new location to the list
+  void _addLocation() {
+    if (textController.text.isEmpty) {
+      setState(() {
+        _validate = true;
+      });
+    } else {
+      setState(() {
+        _validate = false;
+      });
+      final newLocation = Location(
+        name: textController.text,
+        longitude: _positionNew!.longitude,
+        latitude: _positionNew!.latitude,
+      );
+      print(newLocation);
+      locations.add(newLocation);
+      saveLocations(locations).then((_) {
+        // Add a delay of 1 second before navigating
+        Future.delayed(const Duration(seconds: 1), () {
+          // Navigate to the InformationScreen and replace the current screen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => InformationScreen()),
+          );
+        });
+      });
+    }
+  }
+
   @override
   void dispose() {
     textController.dispose();
@@ -60,14 +130,12 @@ class _GoogleMapsState extends State<GoogleMaps> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
             title: const Text('Google Maps'), backgroundColor: Colors.blue[700]),
-        
         body: _isLoading ?  const Center(child: CircularProgressIndicator()) : Column(
     children: [
       Expanded(flex:3, child: Container(child: GoogleMap(
@@ -128,12 +196,7 @@ class _GoogleMapsState extends State<GoogleMaps> {
                 backgroundColor: Colors.blue
               ),
             onPressed: () {
-              setState(() {
-                textController.text.isEmpty ? _validate= true: _validate = false;
-              });
-              print('save functionality');
-              print('current position: $_positionNew'); 
-              print('location name: ${textController.text}');
+              _addLocation();
             },
             child: const Text(
               'Save Location',

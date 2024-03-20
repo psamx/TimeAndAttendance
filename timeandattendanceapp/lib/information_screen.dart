@@ -161,6 +161,16 @@ class _InformationScreenState extends State<InformationScreen> {
   Future<void> _updateStatus() async {
     //Check Current Status
     final String newStatus = status == 'In' ? 'Out' : 'In';
+    final bool isLocationRequired = newStatus == 'In' && selectedLocation == null;
+    if (isLocationRequired) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a location'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
     //If status status is in check if longitude and latitude are null
     sessionId = await storage.read(key: 'sessionId');
     employeeCode = await storage.read(key: 'employeeCode');

@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:timeandattendanceapp/config.dart';
 import 'package:timeandattendanceapp/location_model.dart';
 import 'package:http/http.dart' as http;
+import 'googleMaps.dart';
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({super.key});

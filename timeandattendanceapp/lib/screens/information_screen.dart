@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:TimeAndAttendance/login_screen.dart';
+import 'package:TimeAndAttendance/screens/login_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:TimeAndAttendance/config.dart';
-import 'package:TimeAndAttendance/location_model.dart';
+import 'package:TimeAndAttendance/models/location_model.dart';
 import 'package:http/http.dart' as http;
-import 'googleMaps.dart';
+import 'googlemaps_screen.dart';
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({super.key});

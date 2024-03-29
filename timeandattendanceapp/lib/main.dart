@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'login_screen.dart';
-import 'information_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/information_screen.dart';
 
 void main() => runApp(const MyApp());
 

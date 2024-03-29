@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:TimeAndAttendance/information_screen.dart';
-import 'package:TimeAndAttendance/location_model.dart';
+import 'package:TimeAndAttendance/screens/information_screen.dart';
+import 'package:TimeAndAttendance/models/location_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() => runApp(const GoogleMaps());

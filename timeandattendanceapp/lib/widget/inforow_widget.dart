@@ -13,20 +13,20 @@ class InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: <Widget>[
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(width: 10.0),
-          Text(value),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          label,
+          style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8.0), // Spacer between label and value
+        Text(
+          value,
+          style: const TextStyle(fontSize: 18.0),
+        ),
+        const Divider(), // Divider after each group of label-data
+      ],
     );
   }
 }

@@ -22,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _isObscure = true;
-    checkSession();
   } 
 
   @override
@@ -90,36 +89,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  
-  Future<void> checkSession() async {
-    // No need to declare these variables at the beginning
-    // String? username;
-    // String? password;
-    // String? entity;
-
-    bool usernameExists = await _storageService.containsKey('username');
-    bool passwordExists = await _storageService.containsKey('password');
-
-    if (usernameExists) {
-      String? username = await _storageService.readData('username');
-      if (username != null) { // Always check for null when dealing with async operations
-        _usernameController.text = username;
-      }
-    }
-    if (passwordExists) {
-      String? password = await _storageService.readData('password');
-      if (password != null) {
-        _passwordController.text = password;
-      }
-    }
-    String? entity = await _storageService.readData('entity');
-    if (entity != null && _entities.contains(entity)) { // Ensure the read entity is in your list
-    setState(() {
-      _selectedEntity = entity;
-    });
-  }
-    
-    setState(() {});
-  }
-
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'screens/login_screen.dart';
 import 'screens/information_screen.dart';
+import 'services/storage_service.dart';
 
 void main() => runApp(const MyApp());
 
@@ -27,8 +27,9 @@ class SessionCheckScreen extends StatefulWidget {
   _SessionCheckScreenState createState() => _SessionCheckScreenState();
 }
 
-class _SessionCheckScreenState extends State<SessionCheckScreen> {
-  final storage = const FlutterSecureStorage();
+class _SessionCheckScreenState extends State<SessionCheckScreen> { 
+  final StorageService _storageService = StorageService();
+
 
   @override
   void initState() {
@@ -39,9 +40,9 @@ class _SessionCheckScreenState extends State<SessionCheckScreen> {
   Future<void> checkSession() async {
     String? sessionId;
 
-    bool keyExists = await storage.containsKey(key: 'sessionId');
+    bool keyExists = await _storageService.containsKey('sessionId');
     if (keyExists) {
-        sessionId = await storage.read(key: 'sessionId');
+        sessionId = await _storageService.readData('sessionId');
     } else {
         print('Key "sessionId" does not exist in storage.');
     }

@@ -1,5 +1,4 @@
 import 'package:TimeAndAttendance/services/http_service.dart';
-import 'package:TimeAndAttendance/services/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,12 +10,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final HttpService _httpService = HttpService();
-  final StorageService _storageService = StorageService();
   String? _selectedEntity; // Variable to hold the selected entity
   final List<String> _entities = ['Abacus','Grant Thornton','Hyperion Systems Engineering','Green Dot', 'PwC','Windsor Brokers']; // Example entities
 
-  //if data exists in local storage, fill the text fields with the data
-  var _isObscure;
+  dynamic _isObscure;
   
   @override
   void initState() {

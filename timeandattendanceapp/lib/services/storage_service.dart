@@ -7,6 +7,10 @@ class StorageService{
     await storage.write(key: key, value: value);
   }
 
+  Future<bool> containsKey(String key) async {
+    return await storage.containsKey(key: key);
+  }
+
   Future<String?> readData(String key) async {
     return await storage.read(key: key);
   }

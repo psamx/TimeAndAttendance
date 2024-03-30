@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:TimeAndAttendance/services/location_service.dart';
+import 'package:TimeAndAttendance/services/storage_service.dart';
+import 'package:TimeAndAttendance/widget/inforow_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:TimeAndAttendance/screens/information_screen.dart';
 import 'package:TimeAndAttendance/models/location_model.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() => runApp(const GoogleMaps());
 
@@ -17,16 +19,17 @@ class GoogleMaps extends StatefulWidget {
 
 
 class _GoogleMapsState extends State<GoogleMaps> {
-  final storage = const FlutterSecureStorage();
   late GoogleMapController mapController;
-  LatLng? _currentPosition;
-  LatLng? _positionNew;
-  bool _isLoading = true;
   final LatLng _center = const LatLng(34.757722, 32.464493);
   final List<Marker> markers = [];
   final textController = TextEditingController();
+  final LocationService _locationService = LocationService();
+  LatLng? _currentPosition;
+  LatLng? _positionNew;
+  bool _isLoading = true;
   bool _validate = false; 
   List<Location> locations = [];
+  
   
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -34,61 +37,23 @@ class _GoogleMapsState extends State<GoogleMaps> {
   
   @override
   void initState() {
+    super.initState();
     getLocation();
-    loadLocations();
+    _locationService.loadLocations().then((value) {
+      setState(() {
+        locations = value;
+      });
+    });
   }
 
   Future<void> getLocation() async {
-      print(_isLoading);
-      LocationPermission permission;
-      permission = await Geolocator.requestPermission();
-
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      double lat = position.latitude;
-      double long = position.longitude;
-
-      LatLng location = LatLng(lat, long);
-
+      Position? position = await _locationService.getCurrentLocation();
+      LatLng location = LatLng(position!.latitude, position.longitude);
       setState(() {
-        _currentPosition = location;
-        _positionNew = location;
-        print(_currentPosition);
-        _isLoading = false;
-      });
-      print(_isLoading);
-  }
-
-  Future<void> loadLocations() async {
-    final String? locationsJson = await storage.read(key: 'locations');
-    if (locationsJson != null) {
-      final Map<String, dynamic> locationsMap = jsonDecode(locationsJson);
-      setState(() {
-        locations = locationsMap.entries
-            .map((entry) {
-              final name = entry.key;
-              final locationData = entry.value as Map<String, dynamic>;
-              final longitude = locationData['longitude'] as double;
-              final latitude = locationData['latitude'] as double;
-              return Location(name: name, longitude: longitude, latitude: latitude);
-            })
-            .toList();
-      });
-    }
-    else{
-      locations.add(Location(name: 'WORK', longitude: 33.0480134, latitude: 34.6987503));
-    }
-  }
-
-  Future<void> saveLocations(List<Location> locations) async {
-    final Map<String, Map<String, dynamic>> serializedLocations = {};
-    locations.forEach((location) {
-              serializedLocations[location.name] = {
-                'longitude': location.longitude,
-                'latitude': location.latitude,
-              };
-            });
-    await storage.write(key: 'locations', value: jsonEncode(serializedLocations));
+          _currentPosition = location;
+          _positionNew = location;
+          _isLoading = false;
+        });
   }
 
   //Create a function to add a new location to the list
@@ -106,9 +71,9 @@ class _GoogleMapsState extends State<GoogleMaps> {
         longitude: _positionNew!.longitude,
         latitude: _positionNew!.latitude,
       );
-      print(newLocation);
+      
       locations.add(newLocation);
-      saveLocations(locations).then((_) {
+      _locationService.saveLocations(locations).then((_) {
         // Add a delay of 1 second before navigating
         Future.delayed(const Duration(seconds: 1), () {
           // Navigate to the InformationScreen and replace the current screen
@@ -165,8 +130,8 @@ class _GoogleMapsState extends State<GoogleMaps> {
       ),
       )
       ),
-      _buildInfoRow("Current Latitude", _positionNew!.latitude.toString()),
-      _buildInfoRow("Current Longtitude", _positionNew!.longitude.toString()),
+      InfoRow(label:"Current Latitude", value: _currentPosition!.latitude.toString()),
+      InfoRow(label:"Current Longtitude",value:  _positionNew!.longitude.toString()),
       Expanded(flex: 1,
         child: Container(
           padding: const EdgeInsets.all(16.0),
@@ -214,69 +179,4 @@ class _GoogleMapsState extends State<GoogleMaps> {
       ) 
     );
   }
-  
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: <Widget>[
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(width: 10.0),
-          Text(value),
-        ],
-      ),
-    );
-  }
-  
 }
-
-     /*Align(
-      alignment: Alignment.bottomCenter,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: ElevatedButton(
-              onPressed: () {
-                mapController.animateCamera(
-                  CameraUpdate.newCameraPosition(
-                    const CameraPosition(
-                      target: LatLng(34.69852694203089, 33.04781002476253),
-                      zoom: 17.0,
-                    ),
-                  ),
-                );
-              },
-              child: const Text('Office', style: TextStyle(fontSize: 20,color: Colors.red,fontWeight: FontWeight.bold)),
-            ),
-          ),
-          const SizedBox(width: 10), // Add a gap between the buttons
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: ElevatedButton(
-              onPressed: markers.isNotEmpty ? () {
-                final lat = markers[0].position.latitude;
-                final long = markers[0].position.longitude;
-                final targetLatLng = LatLng(lat, long);
-
-                final cameraPosition = CameraPosition(
-                  target: targetLatLng,
-                  zoom: 17.0,
-                );
-
-                mapController.animateCamera(
-                  CameraUpdate.newCameraPosition(cameraPosition),
-                );
-              } : null,
-              child: const Text('Home', style: TextStyle(fontSize: 20,color: Colors.red,fontWeight: FontWeight.bold)),
-            ),
-          ),
-        ],
-      ),
-    ),*/

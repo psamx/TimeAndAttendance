@@ -120,7 +120,6 @@ class _InformationScreenState extends State<InformationScreen> {
                   InfoRow(label: 'Weekly Hours Worked:',value: weeklyHoursWorked.toString()),
                   InfoRow(label: 'Today Hours Worked:',value: todayHoursWorked.toString()),
                   InfoRow(label: 'Break Hours:',value: breakHours.toString()),
-                  InfoRow(label: 'Employee Code:',value: employeeCode ?? 'Not available'),
                 ],
               ),
             ),

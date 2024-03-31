@@ -1,6 +1,8 @@
 import 'package:TimeAndAttendance/screens/googlemaps_screen.dart';
 import 'package:TimeAndAttendance/services/http_service.dart';
 import 'package:TimeAndAttendance/services/location_service.dart';
+import 'package:TimeAndAttendance/services/popup_service.dart';
+import 'package:TimeAndAttendance/widget/conditionalinforow_widget.dart';
 import 'package:TimeAndAttendance/widget/inforow_widget.dart';
 import 'package:TimeAndAttendance/widget/locationDropdown_widget.dart';
 import 'package:flutter/material.dart';
@@ -115,7 +117,7 @@ class _InformationScreenState extends State<InformationScreen> {
               child: ListView(
                 children: <Widget>[
                   InfoRow(label: 'Employee Name:',value:  employeeName ?? 'Not available'),
-                  InfoRow(label: 'Status:',value: status ?? 'Not available'),
+                  ConditionalInfoRow(label: 'Status:',value: status ?? 'Not available',condition: status == 'In'),
                   InfoRow(label: 'Address:',value: address ?? 'Not available'),
                   InfoRow(label: 'Weekly Hours Worked:',value: weeklyHoursWorked.toString()),
                   InfoRow(label: 'Today Hours Worked:',value: todayHoursWorked.toString()),
@@ -146,7 +148,7 @@ class _InformationScreenState extends State<InformationScreen> {
             //_buildLocationDropdown(),
             ElevatedButton(
               onPressed: () {
-                _updateStatus();
+                PopupService.showConfirmationPopup(context,"Update Status", "Are you sure you want to Clock${status == 'In' ? 'Out' : 'In'}?", _updateStatus);
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20), // Adjust the button's padding

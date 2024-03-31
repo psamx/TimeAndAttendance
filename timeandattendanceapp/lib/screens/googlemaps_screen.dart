@@ -98,7 +98,15 @@ class _GoogleMapsState extends State<GoogleMaps> {
       ),
       home: Scaffold(
         appBar: AppBar(
-            title: const Text('Google Maps'), backgroundColor: Colors.blue[700]),
+            title: const Text(
+              'Google Maps', 
+              style: TextStyle(
+                fontWeight: FontWeight.bold, 
+                color: Colors.white
+                )
+              ), 
+              backgroundColor: Colors.blue[700]
+        ),
         body: _isLoading ?  const Center(child: CircularProgressIndicator()) : Column(
     children: [
       Expanded(flex:3, child: Container(child: GoogleMap(

@@ -75,7 +75,6 @@ class _InformationScreenState extends State<InformationScreen> {
         if(value != null)
         {
           setState(() {
-            print('Old status: $status');
             status = value.status;
             address = value.address;
             weeklyHoursWorked = value.weeklyHoursWorked;
@@ -83,7 +82,6 @@ class _InformationScreenState extends State<InformationScreen> {
             breakHours = value.breakHours;
             longitude = value.longitude;
             latitude = value.latitude;
-            print('New status: $status');
           });
         }
       });

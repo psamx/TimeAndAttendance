@@ -151,10 +151,19 @@ class _InformationScreenState extends State<InformationScreen> {
                 PopupService.showConfirmationPopup(context,"Update Status", "Are you sure you want to Clock${status == 'In' ? 'Out' : 'In'}?", _updateStatus);
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20), // Adjust the button's padding
-                textStyle: const TextStyle(fontSize: 20), // Adjust the button's text size
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                backgroundColor: Colors.blue
               ),
-                child: Text('Clock${status=='In'?'Out':'In'}'),
+              child: Text(
+                  'Clock${status == 'In'?'Out':'In'}',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),

@@ -71,6 +71,12 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                backgroundColor: Colors.blue
+              ),
               onPressed: () {
                 _httpService.login(
                   context,
@@ -79,7 +85,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   _selectedEntity,
                 );
               },
-              child: const Text('Login'),
+              child: const Text('Login',
+              style: TextStyle(
+                fontSize:  16.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                ),
+              )
             ),
           ],
         ),

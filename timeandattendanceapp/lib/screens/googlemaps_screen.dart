@@ -150,8 +150,8 @@ class _GoogleMapsState extends State<GoogleMaps> {
         Expanded(flex: 1,
         child: Container(
           padding: const EdgeInsets.all(16.0),
-          child: TextButton(
-            style: TextButton.styleFrom(
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   
@@ -166,7 +166,7 @@ class _GoogleMapsState extends State<GoogleMaps> {
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Colors.white,
               ),
               ),
           )

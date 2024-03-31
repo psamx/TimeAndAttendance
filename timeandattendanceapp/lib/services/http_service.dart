@@ -111,8 +111,6 @@ class HttpService {
             breakHours: responseData['breakField']
           ); 
 
-          String? longitude;
-          String? latitude;
           if (attendanceStatus.status == 'In')
           {
             attendanceStatus.longitude = responseData['longitudeField'];
@@ -152,9 +150,7 @@ class HttpService {
   } 
 
   Future<AttendanceStatus?> updateStatus(BuildContext context, String? status, Location? selectedLocation,String? longitude,String? latitude) async {
-    print('Input parameters: status: $status, selectedLocation: $selectedLocation, longitude: $longitude, latitude: $latitude');
     final String newStatus = status == 'In' ? 'Out' : 'In';
-    print('newStatus: $newStatus');
     final bool isLocationRequired = newStatus == 'In' && selectedLocation == null;
     if (isLocationRequired) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -168,7 +164,6 @@ class HttpService {
     
     final sessionId = await _storageService.readData('sessionId');
     final employeeCode = await _storageService.readData('employeeCode');
-    print('Session ID: $sessionId Employee Code: $employeeCode status: $newStatus');
     if (sessionId == null || employeeCode == null) {
       print('Session ID or employee code is null');
       //Redirect to the login screen
@@ -201,7 +196,6 @@ class HttpService {
           // Authentication successful
           //_showResponsePopup('Response',response.body);
           final responseData = jsonDecode(response.body);
-          print('Response Data: $responseData');
           AttendanceStatus attendanceStatus = AttendanceStatus(
             //employeeName: responseData['employeeNameField'],
             status: responseData['statusField'],

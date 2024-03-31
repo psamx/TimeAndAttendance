@@ -30,9 +30,7 @@ class LocationService {
 
   Future<void> saveLocations(List<Location> locations) async {
     final Map<String, Map<String, dynamic>> serializedLocations = {};
-    print(locations.length.toString());
     locations.forEach((location) {
-              print(location.name + location.longitude.toString() + location.latitude.toString());
               serializedLocations[location.name] = {
                 'longitude': location.longitude,
                 'latitude': location.latitude,

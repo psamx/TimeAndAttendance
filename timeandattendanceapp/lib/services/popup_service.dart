@@ -21,7 +21,7 @@ class PopupService {
     );
   }
 
-  static void showConfirmationPopup(BuildContext context, String popUpTitle, String popUpText, Function onConfirm) {
+  static void showConfirmationPopup(BuildContext context, String popUpTitle, String popUpText, Function onConfirm ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -40,19 +40,24 @@ class PopupService {
                       onConfirm();
                       Navigator.of(context).pop();
                     },
-                    child: const Text("Yes")
+                    child: const Text(
+                      "Yes",
+                      style: TextStyle(color: Colors.white)
+                      )
                   ),
                 ),
                 SizedBox(width: 8), // Add spacing between buttons
                 Expanded(
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      backgroundColor: Colors.red
-                    ),
+                      backgroundColor: Colors.red),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text("No")
+                    child: const Text(
+                      "No",
+                      style: TextStyle(color: Colors.white)
+                      )
                   ),
                 ),
               ],
@@ -61,6 +66,5 @@ class PopupService {
         );
       },
     );
-  }
-  
+  } 
 }

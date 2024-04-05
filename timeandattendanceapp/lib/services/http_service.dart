@@ -151,16 +151,6 @@ class HttpService {
 
   Future<AttendanceStatus?> updateStatus(BuildContext context, String? status, Location? selectedLocation,String? longitude,String? latitude) async {
     final String newStatus = status == 'In' ? 'Out' : 'In';
-    final bool isLocationRequired = newStatus == 'In' && selectedLocation == null;
-    if (isLocationRequired) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select a location'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return null;
-    }
     
     final sessionId = await _storageService.readData('sessionId');
     final employeeCode = await _storageService.readData('employeeCode');

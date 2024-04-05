@@ -87,7 +87,18 @@ class _InformationScreenState extends State<InformationScreen> {
       });
   }
 
-
+  _validateLocation() {
+    if (status == 'Out' && selectedLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a location'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+    return true;
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -116,7 +127,7 @@ class _InformationScreenState extends State<InformationScreen> {
                 children: <Widget>[
                   InfoRow(label: 'Employee Name:',value:  employeeName ?? 'Not available'),
                   ConditionalInfoRow(label: 'Status:',value: status ?? 'Not available',condition: status == 'In'),
-                  InfoRow(label: 'Address:',value: address ?? 'Not available'),
+                  InfoRow(label: 'Address:',value: status == 'Out' ? "" : address ?? 'Not available'),
                   InfoRow(label: 'Weekly Hours Worked:',value: weeklyHoursWorked.toString()),
                   InfoRow(label: 'Today Hours Worked:',value: todayHoursWorked.toString()),
                   InfoRow(label: 'Break Hours:',value: breakHours.toString()),
@@ -145,7 +156,15 @@ class _InformationScreenState extends State<InformationScreen> {
             //_buildLocationDropdown(),
             ElevatedButton(
               onPressed: () {
-                PopupService.showConfirmationPopup(context,"Update Status", "Are you sure you want to Clock${status == 'In' ? 'Out' : 'In'}?", _updateStatus);
+                if(_validateLocation())
+                {
+                  PopupService.showConfirmationPopup(
+                    context,
+                    "Update Status",
+                    "Are you sure you want to Clock${status == 'In' ? 'Out' : 'In'} from ${status == 'In' ? address : selectedLocation?.name}?",
+                    _updateStatus
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
